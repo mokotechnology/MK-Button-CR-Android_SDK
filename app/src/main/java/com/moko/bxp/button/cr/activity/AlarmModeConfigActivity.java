@@ -354,20 +354,15 @@ public class AlarmModeConfigActivity extends BaseActivity implements SeekBar.OnS
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        switch (seekBar.getId()) {
-            case R.id.sb_adv_range_data:
-                mBind.tvAdvRangeData.setText(String.format("%ddBm", progress - 100));
-                break;
-            case R.id.sb_tx_power:
-                TxPowerEnum txPowerEnum = TxPowerEnum.fromOrdinal(progress);
-                mBind.tvTxPower.setText(String.format("%ddBm", txPowerEnum.getTxPower()));
-                break;
-            case R.id.sb_trigger_tx_power:
-                TxPowerEnum triggerTxPowerEnum = TxPowerEnum.fromOrdinal(progress);
-                mBind.tvTriggerTxPower.setText(String.format("%ddBm", triggerTxPowerEnum.getTxPower()));
-                break;
+        if (seekBar.getId() == R.id.sb_adv_range_data) {
+            mBind.tvAdvRangeData.setText(String.format("%ddBm", progress - 100));
+        } else if (seekBar.getId() == R.id.sb_tx_power) {
+            TxPowerEnum txPowerEnum = TxPowerEnum.fromOrdinal(progress);
+            mBind.tvTxPower.setText(String.format("%ddBm", txPowerEnum.getTxPower()));
+        } else if (seekBar.getId() == R.id.sb_trigger_tx_power) {
+            TxPowerEnum triggerTxPowerEnum = TxPowerEnum.fromOrdinal(progress);
+            mBind.tvTriggerTxPower.setText(String.format("%ddBm", triggerTxPowerEnum.getTxPower()));
         }
-
     }
 
     @Override

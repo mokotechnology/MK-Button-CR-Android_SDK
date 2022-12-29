@@ -6,7 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 
-import com.moko.bxp.button.cr.BaseApplication;
+import com.moko.bxp.button.cr.BuildConfig;
 import com.moko.bxp.button.cr.R;
 import com.moko.bxp.button.cr.databinding.ActivityAboutBinding;
 import com.moko.bxp.button.cr.utils.ToastUtils;
@@ -24,7 +24,9 @@ public class AboutActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         mBind = ActivityAboutBinding.inflate(getLayoutInflater());
         setContentView(mBind.getRoot());
-        mBind.appVersion.setText(String.format("Version:V%s", Utils.getVersionInfo(this)));
+        if (!BuildConfig.IS_LIBRARY) {
+            mBind.appVersion.setText(String.format("Version:V%s", Utils.getVersionInfo(this)));
+        }
         mBind.tvCompanyWebsite.getPaint().setFlags(Paint.UNDERLINE_TEXT_FLAG);
     }
 
@@ -44,9 +46,9 @@ public class AboutActivity extends BaseActivity {
     public void onFeedback(View view) {
         if (isWindowLocked())
             return;
-        File trackerLog = new File(BaseApplication.PATH_LOGCAT + File.separator + "MKButtonCR.txt");
-        File trackerLogBak = new File(BaseApplication.PATH_LOGCAT + File.separator + "MKButtonCR.txt.bak");
-        File trackerCrashLog = new File(BaseApplication.PATH_LOGCAT + File.separator + "crash_log.txt");
+        File trackerLog = new File(CRMainActivity.PATH_LOGCAT + File.separator + "MKButtonCR.txt");
+        File trackerLogBak = new File(CRMainActivity.PATH_LOGCAT + File.separator + "MKButtonCR.txt.bak");
+        File trackerCrashLog = new File(CRMainActivity.PATH_LOGCAT + File.separator + "cr_crash_log.txt");
         if (!trackerLog.exists() || !trackerLog.canRead()) {
             ToastUtils.showToast(this, "File is not exists!");
             return;

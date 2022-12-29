@@ -12,7 +12,6 @@ import com.moko.ble.lib.event.ConnectStatusEvent;
 import com.moko.ble.lib.event.OrderTaskResponseEvent;
 import com.moko.ble.lib.task.OrderTaskResponse;
 import com.moko.bxp.button.cr.AppConstants;
-import com.moko.bxp.button.cr.BaseApplication;
 import com.moko.bxp.button.cr.R;
 import com.moko.bxp.button.cr.adapter.ExportDataListAdapter;
 import com.moko.bxp.button.cr.databinding.ActivityExportDataBinding;
@@ -76,21 +75,21 @@ public class ExportDataActivity extends BaseActivity {
                 mBind.tvTitle.setText("Single press event");
                 exportDatas = CRMokoSupport.getInstance().exportSingleEvents;
                 storeString = CRMokoSupport.getInstance().storeSingleEventString;
-                PATH_LOGCAT = BaseApplication.PATH_LOGCAT + File.separator + EXPORT_FILE_SINGLE;
+                PATH_LOGCAT = CRMainActivity.PATH_LOGCAT + File.separator + EXPORT_FILE_SINGLE;
                 exportTitle = EXPORT_FILE_SINGLE_TITLE;
                 break;
             case 1:
                 mBind.tvTitle.setText("Double press event");
                 exportDatas = CRMokoSupport.getInstance().exportDoubleEvents;
                 storeString = CRMokoSupport.getInstance().storeDoubleEventString;
-                PATH_LOGCAT = BaseApplication.PATH_LOGCAT + File.separator + EXPORT_FILE_DOUBLE;
+                PATH_LOGCAT = CRMainActivity.PATH_LOGCAT + File.separator + EXPORT_FILE_DOUBLE;
                 exportTitle = EXPORT_FILE_DOUBLE_TITLE;
                 break;
             case 2:
                 mBind.tvTitle.setText("Long press event");
                 exportDatas = CRMokoSupport.getInstance().exportLongEvents;
                 storeString = CRMokoSupport.getInstance().storeLongEventString;
-                PATH_LOGCAT = BaseApplication.PATH_LOGCAT + File.separator + EXPORT_FILE_LONG;
+                PATH_LOGCAT = CRMainActivity.PATH_LOGCAT + File.separator + EXPORT_FILE_LONG;
                 exportTitle = EXPORT_FILE_LONG_TITLE;
                 break;
         }

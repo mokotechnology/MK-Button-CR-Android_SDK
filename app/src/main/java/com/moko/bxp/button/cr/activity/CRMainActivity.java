@@ -6,7 +6,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
@@ -21,7 +23,9 @@ import com.moko.ble.lib.event.ConnectStatusEvent;
 import com.moko.ble.lib.event.OrderTaskResponseEvent;
 import com.moko.ble.lib.task.OrderTask;
 import com.moko.ble.lib.task.OrderTaskResponse;
+import com.moko.ble.lib.utils.MokoUtils;
 import com.moko.bxp.button.cr.AppConstants;
+import com.moko.bxp.button.cr.BuildConfig;
 import com.moko.bxp.button.cr.R;
 import com.moko.bxp.button.cr.adapter.DeviceListAdapter;
 import com.moko.bxp.button.cr.databinding.ActivityMainBinding;
@@ -46,6 +50,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -68,11 +73,25 @@ public class CRMainActivity extends BaseActivity implements MokoScanDeviceCallba
     private Handler mHandler;
     private boolean isPasswordError;
 
+    public static String PATH_LOGCAT;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mBind = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(mBind.getRoot());
+        // 初始化Xlog
+        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+            // 优先保存到SD卡中
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                PATH_LOGCAT = getExternalFilesDir(null).getAbsolutePath() + File.separator + (BuildConfig.IS_LIBRARY ? "MKButton" : "MKButtonCR");
+            } else {
+                PATH_LOGCAT = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + (BuildConfig.IS_LIBRARY ? "MKButton" : "MKButtonCR");
+            }
+        } else {
+            // 如果SD卡不存在，就保存到本应用的目录下
+            PATH_LOGCAT = getFilesDir().getAbsolutePath() + File.separator + (BuildConfig.IS_LIBRARY ? "MKButton" : "MKButtonCR");
+        }
         CRMokoSupport.getInstance().init(getApplicationContext());
         advInfoHashMap = new ConcurrentHashMap<>();
         advInfoList = new ArrayList<>();
@@ -175,7 +194,6 @@ public class CRMainActivity extends BaseActivity implements MokoScanDeviceCallba
         if (MokoConstants.ACTION_ORDER_TIMEOUT.equals(action)) {
         }
         if (MokoConstants.ACTION_ORDER_FINISH.equals(action)) {
-            dismissLoadingMessageDialog();
         }
         if (MokoConstants.ACTION_ORDER_RESULT.equals(action)) {
             OrderTaskResponse response = event.getResponse();
@@ -183,6 +201,16 @@ public class CRMainActivity extends BaseActivity implements MokoScanDeviceCallba
             int responseType = response.responseType;
             byte[] value = response.responseValue;
             switch (orderCHAR) {
+                case CHAR_SOFTWARE_REVISION:
+                    String softwareVersion = new String(value).trim();
+                    dismissLoadingMessageDialog();
+                    if (!softwareVersion.contains("BXP-B-CR")) {
+                        showDeviceTypeErrorDialog();
+                        return;
+                    }
+                    Intent i = new Intent(this, DeviceInfoActivity.class);
+                    startActivityForResult(i, AppConstants.REQUEST_CODE_DEVICE_INFO);
+                    break;
                 case CHAR_PASSWORD:
                     if (value.length == 5) {
                         int header = value[0] & 0xFF;// 0xEB
@@ -204,9 +232,8 @@ public class CRMainActivity extends BaseActivity implements MokoScanDeviceCallba
                                         mSavedPassword = mPassword;
                                         SPUtiles.setStringValue(this, AppConstants.SP_KEY_SAVED_PASSWORD, mSavedPassword);
                                         XLog.i("Success");
-                                        Intent i = new Intent(this, DeviceInfoActivity.class);
-                                        startActivityForResult(i, AppConstants.REQUEST_CODE_DEVICE_INFO);
                                     } else {
+                                        dismissLoadingMessageDialog();
                                         isPasswordError = true;
                                         ToastUtils.showToast(this, "Password incorrect！");
                                         CRMokoSupport.getInstance().disConnectBle();
@@ -218,6 +245,18 @@ public class CRMainActivity extends BaseActivity implements MokoScanDeviceCallba
                     break;
             }
         }
+    }
+
+    private void showDeviceTypeErrorDialog() {
+        AlertMessageDialog dialog = new AlertMessageDialog();
+        dialog.setTitle("");
+        dialog.setMessage("");
+        dialog.setCancelGone();
+        dialog.setConfirm("");
+        dialog.setOnAlertConfirmListener(() -> {
+            CRMokoSupport.getInstance().disConnectBle();
+        });
+        dialog.show(getSupportFragmentManager());
     }
 
     @Override
@@ -525,10 +564,14 @@ public class CRMainActivity extends BaseActivity implements MokoScanDeviceCallba
             mHandler.removeMessages(0);
             mokoBleScanner.stopScanDevice();
         }
-        AlertMessageDialog dialog = new AlertMessageDialog();
-        dialog.setMessage(R.string.main_exit_tips);
-        dialog.setOnAlertConfirmListener(() -> CRMainActivity.this.finish());
-        dialog.show(getSupportFragmentManager());
+        if (BuildConfig.IS_LIBRARY) {
+            finish();
+        } else {
+            AlertMessageDialog dialog = new AlertMessageDialog();
+            dialog.setMessage(R.string.main_exit_tips);
+            dialog.setOnAlertConfirmListener(() -> finish());
+            dialog.show(getSupportFragmentManager());
+        }
     }
 
     public void onRefresh(View view) {

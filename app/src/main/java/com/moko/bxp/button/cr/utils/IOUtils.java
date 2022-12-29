@@ -13,7 +13,8 @@ import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
 
 import com.elvishew.xlog.XLog;
-import com.moko.bxp.button.cr.BaseApplication;
+import com.moko.bxp.button.cr.BuildConfig;
+import com.moko.bxp.button.cr.activity.CRMainActivity;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -26,7 +27,7 @@ import java.util.Locale;
 import androidx.annotation.RequiresApi;
 
 public class IOUtils {
-    public static final String CRASH_FILE = "crash_log.txt";
+    public static final String CRASH_FILE = "cr_crash_log.txt";
 
     /**
      * 判断SDCard是否存在 [当没有外挂SD卡时，内置ROM也被识别为存在sd卡]
@@ -47,7 +48,7 @@ public class IOUtils {
         boolean exist = isSdCardExist();
         String sdpath = "";
         if (exist) {
-            sdpath = BaseApplication.PATH_LOGCAT;
+            sdpath = CRMainActivity.PATH_LOGCAT;
         }
         return sdpath;
 
@@ -61,7 +62,7 @@ public class IOUtils {
      */
     public static String getDefaultFilePath(Context context) {
         String filepath = "";
-        File file = new File(BaseApplication.PATH_LOGCAT, CRASH_FILE);
+        File file = new File(CRMainActivity.PATH_LOGCAT, CRASH_FILE);
         try {
             if (file.exists()) {
                 filepath = file.getAbsolutePath();
@@ -82,7 +83,7 @@ public class IOUtils {
      */
     public static String getFilePath(String fileName) {
         String filepath = "";
-        File file = new File(BaseApplication.PATH_LOGCAT, fileName);
+        File file = new File(CRMainActivity.PATH_LOGCAT, fileName);
         try {
             if (file.exists()) {
                 filepath = file.getAbsolutePath();
@@ -223,7 +224,7 @@ public class IOUtils {
         values.put(MediaStore.DownloadColumns.DISPLAY_NAME, file.getName());
         values.put(MediaStore.DownloadColumns.TITLE, file.getName());
         values.put(MediaStore.DownloadColumns.MIME_TYPE, "*/*");
-        values.put(MediaStore.DownloadColumns.RELATIVE_PATH, "Download/MKButtonCR");
+        values.put(MediaStore.DownloadColumns.RELATIVE_PATH, BuildConfig.IS_LIBRARY ? "Download/MKButton" : "Download/MKButtonCR");
         Uri external = MediaStore.Downloads.EXTERNAL_CONTENT_URI;
         Uri uri = null;
         ContentResolver cr = context.getContentResolver();
