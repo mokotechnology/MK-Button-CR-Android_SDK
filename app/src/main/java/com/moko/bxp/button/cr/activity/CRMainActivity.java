@@ -232,6 +232,7 @@ public class CRMainActivity extends BaseActivity implements MokoScanDeviceCallba
                                         mSavedPassword = mPassword;
                                         SPUtiles.setStringValue(this, AppConstants.SP_KEY_SAVED_PASSWORD, mSavedPassword);
                                         XLog.i("Success");
+                                        CRMokoSupport.getInstance().sendOrder(OrderTaskAssembler.getSoftwareVersion());
                                     } else {
                                         dismissLoadingMessageDialog();
                                         isPasswordError = true;
@@ -249,13 +250,11 @@ public class CRMainActivity extends BaseActivity implements MokoScanDeviceCallba
 
     private void showDeviceTypeErrorDialog() {
         AlertMessageDialog dialog = new AlertMessageDialog();
-        dialog.setTitle("");
-        dialog.setMessage("");
+        dialog.setTitle("Warning!");
+        dialog.setMessage("The software version selected is incorrect.Please back to the product list options and select again.");
         dialog.setCancelGone();
-        dialog.setConfirm("");
-        dialog.setOnAlertConfirmListener(() -> {
-            CRMokoSupport.getInstance().disConnectBle();
-        });
+        dialog.setConfirm("Confirm");
+        dialog.setOnAlertConfirmListener(() -> CRMokoSupport.getInstance().disConnectBle());
         dialog.show(getSupportFragmentManager());
     }
 
