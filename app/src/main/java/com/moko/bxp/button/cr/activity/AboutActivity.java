@@ -46,9 +46,9 @@ public class AboutActivity extends BaseActivity {
     public void onFeedback(View view) {
         if (isWindowLocked())
             return;
-        File trackerLog = new File(CRMainActivity.PATH_LOGCAT + File.separator + "MKButtonCR.txt");
-        File trackerLogBak = new File(CRMainActivity.PATH_LOGCAT + File.separator + "MKButtonCR.txt.bak");
-        File trackerCrashLog = new File(CRMainActivity.PATH_LOGCAT + File.separator + "cr_crash_log.txt");
+        File trackerLog = new File(CRMainActivity.PATH_LOGCAT + File.separator + (BuildConfig.IS_LIBRARY ? "MKButton.txt" : "MKButtonCR.txt"));
+        File trackerLogBak = new File(CRMainActivity.PATH_LOGCAT + File.separator + (BuildConfig.IS_LIBRARY ? "MKButton.txt.bak" : "MKButtonCR.txt.bak"));
+        File trackerCrashLog = new File(CRMainActivity.PATH_LOGCAT + File.separator + (BuildConfig.IS_LIBRARY ? "crash_log.txt" : "cr_crash_log.txt"));
         if (!trackerLog.exists() || !trackerLog.canRead()) {
             ToastUtils.showToast(this, "File is not exists!");
             return;
