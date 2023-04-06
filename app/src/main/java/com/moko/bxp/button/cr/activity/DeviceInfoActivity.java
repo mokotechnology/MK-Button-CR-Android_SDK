@@ -438,7 +438,7 @@ public class DeviceInfoActivity extends BaseActivity implements RadioGroup.OnChe
                     else if (slotType == 3)
                         orderTasks.add(OrderTaskAssembler.getSlotParams(3));
                     CRMokoSupport.getInstance().sendOrder(orderTasks.toArray(new OrderTask[]{}));
-                }, 500);
+                }, 200);
             }
         }
     }
