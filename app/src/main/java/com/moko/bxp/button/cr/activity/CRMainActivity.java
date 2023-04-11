@@ -471,7 +471,7 @@ public class CRMainActivity extends BaseActivity implements MokoScanDeviceCallba
 
             @Override
             public void onDismiss() {
-
+                if (null == animation) startScan();
             }
         });
         dialog.show(getSupportFragmentManager());
