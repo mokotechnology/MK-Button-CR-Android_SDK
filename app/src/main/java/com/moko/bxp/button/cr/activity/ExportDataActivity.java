@@ -15,7 +15,7 @@ import com.moko.bxp.button.cr.AppConstants;
 import com.moko.bxp.button.cr.R;
 import com.moko.bxp.button.cr.adapter.ExportDataListAdapter;
 import com.moko.bxp.button.cr.databinding.ActivityExportDataBinding;
-import com.moko.bxp.button.cr.dialog.LoadingMessageDialog;
+import com.moko.lib.bxpui.dialog.LoadingMessageDialog;
 import com.moko.bxp.button.cr.utils.Utils;
 import com.moko.support.cr.CRMokoSupport;
 import com.moko.support.cr.entity.ExportData;

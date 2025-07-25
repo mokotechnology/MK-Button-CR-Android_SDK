@@ -10,7 +10,7 @@ import com.moko.ble.lib.task.OrderTask;
 import com.moko.ble.lib.task.OrderTaskResponse;
 import com.moko.ble.lib.utils.MokoUtils;
 import com.moko.bxp.button.cr.databinding.ActivitySystemInfoBinding;
-import com.moko.bxp.button.cr.dialog.LoadingMessageDialog;
+import com.moko.lib.bxpui.dialog.LoadingMessageDialog;
 import com.moko.support.cr.CRMokoSupport;
 import com.moko.support.cr.OrderTaskAssembler;
 import com.moko.support.cr.entity.OrderCHAR;

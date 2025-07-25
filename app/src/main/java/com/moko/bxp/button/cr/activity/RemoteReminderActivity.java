@@ -11,8 +11,8 @@ import com.moko.ble.lib.task.OrderTask;
 import com.moko.ble.lib.task.OrderTaskResponse;
 import com.moko.ble.lib.utils.MokoUtils;
 import com.moko.bxp.button.cr.databinding.ActivityRemoteReminderNotifyTypeBinding;
-import com.moko.bxp.button.cr.dialog.LoadingMessageDialog;
-import com.moko.bxp.button.cr.utils.ToastUtils;
+import com.moko.lib.bxpui.dialog.LoadingMessageDialog;
+import com.moko.lib.bxpui.utils.ToastUtils;
 import com.moko.support.cr.CRMokoSupport;
 import com.moko.support.cr.OrderTaskAssembler;
 import com.moko.support.cr.entity.OrderCHAR;
@@ -233,7 +233,7 @@ public class RemoteReminderActivity extends BaseActivity {
         if (buzzerTime < 1 || buzzerTime > 6000)
             return false;
         int buzzerInterval = Integer.parseInt(buzzerIntervalStr);
-        if (buzzerInterval < 1 || buzzerInterval > 100)
+        if (buzzerInterval > 100)
             return false;
         return true;
     }
@@ -248,7 +248,7 @@ public class RemoteReminderActivity extends BaseActivity {
         if (ledTime < 1 || ledTime > 6000)
             return false;
         int ledInterval = Integer.parseInt(ledIntervalStr);
-        if (ledInterval < 1 || ledInterval > 100)
+        if (ledInterval > 100)
             return false;
         return true;
     }
@@ -263,7 +263,7 @@ public class RemoteReminderActivity extends BaseActivity {
         if (vibrationTime < 1 || vibrationTime > 6000)
             return false;
         int vibrationInterval = Integer.parseInt(vibrationIntervalStr);
-        if (vibrationInterval < 1 || vibrationInterval > 100)
+        if (vibrationInterval > 100)
             return false;
         return true;
     }

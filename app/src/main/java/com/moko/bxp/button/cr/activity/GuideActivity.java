@@ -13,7 +13,7 @@ import android.provider.Settings;
 
 import com.elvishew.xlog.XLog;
 import com.moko.bxp.button.cr.R;
-import com.moko.bxp.button.cr.dialog.PermissionDialog;
+import com.moko.lib.bxpui.dialog.PermissionDialog;
 import com.moko.bxp.button.cr.utils.Utils;
 import com.permissionx.guolindev.PermissionX;
 

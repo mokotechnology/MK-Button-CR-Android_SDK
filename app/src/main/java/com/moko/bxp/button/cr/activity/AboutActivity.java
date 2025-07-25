@@ -9,7 +9,7 @@ import android.view.View;
 import com.moko.bxp.button.cr.BuildConfig;
 import com.moko.bxp.button.cr.R;
 import com.moko.bxp.button.cr.databinding.ActivityAboutBinding;
-import com.moko.bxp.button.cr.utils.ToastUtils;
+import com.moko.lib.bxpui.utils.ToastUtils;
 import com.moko.bxp.button.cr.utils.Utils;
 
 import java.io.File;
