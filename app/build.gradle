@@ -63,7 +63,7 @@ android {
 
     if (isLibrary.toBoolean()) {
         libraryVariants.all { variant ->
-            if (variant.buildType.name == "release") {
+            if (variant.buildType.name == "debug") {
                 // 修改aar名称
                 variant.outputs.all { output ->
                     def formatDate = new Date().format("yyyyMMddHHmm")
